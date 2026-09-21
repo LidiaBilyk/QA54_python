@@ -21,14 +21,15 @@ print(fruits)
 
 
 #delete - remove(), pop(), del, clear()
+print("remove")
 e = ["apple", "banana", "orange"]
 e.remove("banana")
 print(e)
-
+print("pop")
 f = ["apple", "banana", "orange"]
 popped = f.pop(1)
 print(popped,f)
-
+print("del")
 h = ["apple", "banana", "orange"]
 del h[0]
 print(h)
