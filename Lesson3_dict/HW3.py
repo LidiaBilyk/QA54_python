@@ -88,6 +88,8 @@ def print_sublist_reverse(lst, start, finish):
         sublist = lst[start:finish+1]
         sublist_reversed = sublist[::-1]
         print(lst[:start] + sublist_reversed + lst[finish+1:])
+        # result = lst[:start]+lst[start:finish+1][::-1]+lst[finish+1:]
+        # print(result)
 
 print_sublist_reverse([10, 20, 30, 40, 50, 60], 1, 3)
 # [10, 40, 30, 20, 50, 60]
