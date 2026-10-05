@@ -1,3 +1,4 @@
+#map(func, iter) - applies func to each item of iterable
 numbers = [1,2,3,4,5,6]
 squ = map(lambda x: x ** 2, numbers)
 
