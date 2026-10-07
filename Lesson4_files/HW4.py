@@ -102,6 +102,7 @@ def save_user(username, email, country):
     field_names = "username", "email", "country"
     field_values = username, email, country
     json_data = {name:value for name, value in zip(field_names, field_values)}
+    # json_data = dict(zip(field_names, field_values))
     with open("users.json", "w", encoding="utf-8") as file:
         json.dump(json_data, file, indent=4, skipkeys=True)
 
@@ -146,3 +147,15 @@ create_logs_folder()
 # ·       После выполнения программы проверьте содержимое созданных файлов.
 #
 # #
+
+
+def create_test_report(project_name, tester_name, passed, failed):
+    Path("reports/Phonebook").mkdir(parents=True, exist_ok=True)
+    with open("reports/Phonebook/report.txt", "w", encoding="utf-8") as file:
+        file.write(f"Project: {project_name}\n")
+        file.write(f"Tester: {tester_name}\n")
+        file.write(f"Passed tests: {passed}\n")
+        file.write(f"Failed tests: {failed}\n")
+        file.write(f"Total test: {failed + passed}\n")
+
+create_test_report("Phonebook", "Anna", 18, 2)
