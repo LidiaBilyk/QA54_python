@@ -9,6 +9,7 @@
 # Проверьте пустой список, повторное добавление записи и чтение файла с пустыми строками.
 import csv
 import json
+from pathlib import Path
 from pprint import pprint
 
 print("Task1")
@@ -179,3 +180,43 @@ print()
 # •    При повторном запуске файлы должны обновляться, а не дублировать старые результаты.
 #
 # Используйте: pathlib.Path, mkdir(parents=True, exist_ok=True), csv.DictReader(), json.dump(), with open(), циклы, условия, списки и словари.
+print("Task4")
+
+def build_run_report(project_name, csv_filename):
+    result = {
+        "total": 0,
+        "passed": 0,
+        "failed": 0,
+        "total_duration_ms": 0,
+        "failed_ids": []
+    }
+    with open(csv_filename, "r", encoding="utf-8") as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            if row:
+                result["total"] += 1
+                result["total_duration_ms"] += int(row["duration_ms"])
+                if row["status"] == "PASSED":
+                    result["passed"] += 1
+                if row["status"] == "FAILED":
+                    result["failed"] += 1
+                    result["failed_ids"].append(row["test_id"])
+
+    # result = json.loads(get_test_statistics("results.csv"))
+
+    reports_dir = Path("reports")/project_name
+    reports_dir.mkdir(parents=True, exist_ok=True)
+    summary_filepath = reports_dir/"summary.json"
+    failed_filepath = reports_dir/"failed_tests.txt"
+
+    # summary_data = {"project": project_name, "total": int(result["total"]), "passed": int(result["passed"]), "failed": int(result["failed"]), "total_duration_ms": int(["total_duration_ms"])}
+    summary_data = {"project" : project_name, "total" : result["total"], "passed" : result["passed"], "failed" : result["failed"], "total_duration_ms" : result["total_duration_ms"]}
+    with open(summary_filepath, "w", encoding="utf-8") as file:
+        json.dump(summary_data, file, indent=4, ensure_ascii=False)
+
+    with open(failed_filepath, "w", encoding="utf-8") as file:
+        for test_id in result["failed_ids"]:
+            file.write(test_id + "\n")
+    return summary_data
+
+print(build_run_report("Shop", "results.csv"))
