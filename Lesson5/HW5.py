@@ -87,10 +87,9 @@ def get_test_statistics(filename):
                 if row["status"] == "FAILED":
                     result["failed"] += 1
                     result["failed_ids"].append(row["test_id"])
-    # return result
-    return json.dumps(result, indent=4)
+    return result
 
-print(get_test_statistics("results.csv"))
+print(json.dumps(get_test_statistics("results.csv"), indent=4))
 # pprint(get_test_statistics("results.csv"),sort_dicts=False)  #pprint!!!
 
 # {
@@ -183,34 +182,34 @@ print()
 print("Task4")
 
 def build_run_report(project_name, csv_filename):
-    result = {
-        "total": 0,
-        "passed": 0,
-        "failed": 0,
-        "total_duration_ms": 0,
-        "failed_ids": []
-    }
-    with open(csv_filename, "r", encoding="utf-8") as file:
-        reader = csv.DictReader(file)
-        for row in reader:
-            if row:
-                result["total"] += 1
-                result["total_duration_ms"] += int(row["duration_ms"])
-                if row["status"] == "PASSED":
-                    result["passed"] += 1
-                if row["status"] == "FAILED":
-                    result["failed"] += 1
-                    result["failed_ids"].append(row["test_id"])
+    # result = {
+    #     "total": 0,
+    #     "passed": 0,
+    #     "failed": 0,
+    #     "total_duration_ms": 0,
+    #     "failed_ids": []
+    # }
+    # with open(csv_filename, "r", encoding="utf-8") as file:
+    #     reader = csv.DictReader(file)
+    #     for row in reader:
+    #         if row:
+    #             result["total"] += 1
+    #             result["total_duration_ms"] += int(row["duration_ms"])
+    #             if row["status"] == "PASSED":
+    #                 result["passed"] += 1
+    #             if row["status"] == "FAILED":
+    #                 result["failed"] += 1
+    #                 result["failed_ids"].append(row["test_id"])
 
-    # result = json.loads(get_test_statistics("results.csv"))
+    result = get_test_statistics("results.csv")
 
     reports_dir = Path("reports")/project_name
     reports_dir.mkdir(parents=True, exist_ok=True)
     summary_filepath = reports_dir/"summary.json"
     failed_filepath = reports_dir/"failed_tests.txt"
 
-    # summary_data = {"project": project_name, "total": int(result["total"]), "passed": int(result["passed"]), "failed": int(result["failed"]), "total_duration_ms": int(["total_duration_ms"])}
-    summary_data = {"project" : project_name, "total" : result["total"], "passed" : result["passed"], "failed" : result["failed"], "total_duration_ms" : result["total_duration_ms"]}
+    summary_data = {"project": project_name, "total": int(result["total"]), "passed": int(result["passed"]), "failed": int(result["failed"]), "total_duration_ms": int(result["total_duration_ms"])}
+    # summary_data = {"project" : project_name, "total" : result["total"], "passed" : result["passed"], "failed" : result["failed"], "total_duration_ms" : result["total_duration_ms"]}
     with open(summary_filepath, "w", encoding="utf-8") as file:
         json.dump(summary_data, file, indent=4, ensure_ascii=False)
 
